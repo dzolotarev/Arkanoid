@@ -1,6 +1,16 @@
-# ⚡ Arkanoid v1.0.0
+# ⚡ Arkanoid
 
-Классическая игра **Arkanoid** на Java с неоновой графикой, частицами и системой уровней.
+Классическая игра **Arkanoid** на Java Swing с неоновой графикой, частицами и системой уровней — без внешних зависимостей.
+
+![Java](https://img.shields.io/badge/Java-17+-orange)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
+## Скриншоты
+
+| Игровой процесс | Уровень 3 |
+|---|---|
+| ![Игровой процесс](docs/screenshot-gameplay.png) | ![Уровень 3](docs/screenshot-level3.png) |
+| Сетка кирпичей, мяч со следом, частицы от разбитых кирпичей | Кирпичи с 2 HP, пробоины, рекорд в HUD |
 
 ## Возможности
 
@@ -14,35 +24,34 @@
 
 ## Системные требования
 
-- Linux x86_64
-- Или: `java 17+` для запуска JAR-версии
+- Linux x86_64 — для нативной сборки
+- Или Java 17+ — для JAR-версии
 
-## Сборки
+## Готовые сборки
 
-| Файл | Описание | Размер |
-|------|----------|--------|
-| `arkanoid-linux.tar.gz` | Нативный ELF-бинарник со встроенной JVM (v1.0.0) | 31 МБ |
-| `src/` + Gradle | Исходники для сборки | — |
+Релиз: [v1.0.0](https://github.com/dzolotarev/Arkanoid/releases/tag/v1.0.0)
 
-## Установка
+| Файл | Описание |
+|------|----------|
+| `arkanoid-1.0.0.jar` | Универсальный JAR, нужен только Java 17+ |
+| `arkanoid-1.0.0-linux-x64.tar.gz` | Нативный ELF-лаунчер + урезанный JRE внутри (jlink) |
 
-```bash
-tar xzf arkanoid-linux.tar.gz
-```
-
-## Запуск
-
-### Нативная сборка (рекомендуется)
-
-```bash
-./arkanoid-linux/bin/Arkanoid
-```
+## Установка и запуск
 
 ### JAR-сборка
 
 ```bash
-java -jar arkanoid.jar
+java -jar arkanoid-1.0.0.jar
 ```
+
+### Нативная сборка
+
+```bash
+tar xzf arkanoid-1.0.0-linux-x64.tar.gz
+./Arkanoid/bin/Arkanoid
+```
+
+Внутри архива — свой JRE, собранный `jlink` (`--strip-debug --no-header-files --no-man-pages --compress=2`), поэтому Java на машине не нужна.
 
 ## Управление
 
@@ -54,38 +63,46 @@ java -jar arkanoid.jar
 
 ## Сборка из исходников
 
+### Gradle (рекомендуется)
+
 ```bash
-javac -d build/classes $(find src/main/java -name "*.java")
-jar cfe arkanoid.jar com.arcanoid.Main -C build/classes .
-java -jar arkanoid.jar
+# JAR
+./gradlew jar
+java -jar build/libs/arkanoid-1.0.0.jar
+
+# Нативный app-image
+./gradlew nativeImage
+./build/jpackage/Arkanoid/bin/Arkanoid
 ```
 
-Или через jpackage для нативного бинарника:
+`nativeImage` использует `jpackage` из `PATH` (или переменную окружения `JPACKAGE`) и `--add-modules java.base,java.desktop`:
 
 ```bash
-mkdir -p deploy-input && cp arkanoid.jar deploy-input/
-jpackage --type app-image \
-  --name Arkanoid \
-  --input deploy-input \
-  --main-jar arkanoid.jar \
-  --main-class com.arcanoid.Main \
-  --app-version 1.0 \
-  --module-path $(dirname $(readlink -f $(which java)))/jmods \
-  --add-modules java.desktop,java.base,java.logging,java.management,java.sql,java.xml,jdk.unsupported
+JPACKAGE=/path/to/jpackage ./gradlew nativeImage
+```
+
+### Напрямую через javac
+
+```bash
+javac -d out $(find src/main/java -name '*.java')
+jar cfe arkanoid.jar com.arcanoid.Main -C out .
+java -jar arkanoid.jar
 ```
 
 ## Структура проекта
 
 ```
 arkanoid/
-├── build/dist/             # готовые сборки (вне git)
-├── src/main/java/com/arkanoid/
-│   ├── Main.java           # точка входа
-│   ├── GameFrame.java      # окно JFrame
-│   └── GamePanel.java      # игровая логика и рендеринг
-├── LICENSE                 # MIT
-├── build.gradle.kts        # конфигурация Gradle
-└── settings.gradle.kts     # имя проекта
+├── docs/                     # скриншоты для README и релиза
+├── src/main/java/com/arcanoid/
+│   ├── Main.java             # точка входа
+│   ├── GameFrame.java        # окно JFrame
+│   ├── GamePanel.java        # игровая логика и рендеринг
+│   └── ConsoleArkanoid.java  # консольная версия той же игры
+├── build/dist/               # готовые сборки (вне git)
+├── LICENSE                   # MIT
+├── build.gradle.kts          # конфигурация Gradle + таск nativeImage
+└── settings.gradle.kts       # имя проекта
 ```
 
 ## License
