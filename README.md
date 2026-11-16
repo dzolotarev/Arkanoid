@@ -51,7 +51,7 @@ tar xzf arkanoid-1.0.0-linux-x64.tar.gz
 ./Arkanoid/bin/Arkanoid
 ```
 
-Внутри архива — свой JRE, собранный `jlink` (`--strip-debug --no-header-files --no-man-pages --compress=2`), поэтому Java на машине не нужна.
+Внутри архива — свой JRE, собранный `jlink` (`--strip-debug --no-header-files --no-man-pages --compress=2`) из Temurin (Eclipse Adoptium), поэтому Java на машине не нужна: app-image ~54 МБ, архив ~32 МБ.
 
 ## Управление
 
@@ -75,10 +75,10 @@ java -jar build/libs/arkanoid-1.0.0.jar
 ./build/jpackage/Arkanoid/bin/Arkanoid
 ```
 
-`nativeImage` использует `jpackage` из `PATH` (или переменную окружения `JPACKAGE`) и `--add-modules java.base,java.desktop`:
+`nativeImage` использует `jpackage` из `PATH` (или переменную окружения `JPACKAGE`) и `--add-modules java.base,java.desktop`. Внутрь app-image попадает JRE этого JDK — релиз собран на Temurin:
 
 ```bash
-JPACKAGE=/path/to/jpackage ./gradlew nativeImage
+JPACKAGE=/path/to/temurin-17/bin/jpackage ./gradlew packageDist
 ```
 
 ### Напрямую через javac
