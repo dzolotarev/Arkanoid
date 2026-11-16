@@ -78,15 +78,16 @@ jpackage --type app-image \
 
 ```
 arkanoid/
-├── arkanoid-linux.tar.gz   # готовая сборка
+├── build/dist/             # готовые сборки (вне git)
 ├── src/main/java/com/arkanoid/
 │   ├── Main.java           # точка входа
 │   ├── GameFrame.java      # окно JFrame
 │   └── GamePanel.java      # игровая логика и рендеринг
+├── LICENSE                 # MIT
 ├── build.gradle.kts        # конфигурация Gradle
 └── settings.gradle.kts     # имя проекта
 ```
 
 ## License
 
-MIT
+MIT — подробности в [LICENSE](LICENSE).

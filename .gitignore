@@ -1,13 +1,21 @@
+### Java / Gradle ###
+build/
+.gradle/
+out/
+*.class
+
+### Дистрибутивы и сборки ###
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.tar.gz
+*.zip
+
+### Maven (наследие, проект на Gradle) ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -27,12 +35,10 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+### OS ###
 .DS_Store
+Thumbs.db
